@@ -29,25 +29,35 @@ public class MainActivity extends AppCompatActivity {
         setupOperatorButtonListeners();
         setupFunctionButtonListeners();
 
-        DecimalFormatSymbols symbols = new DecimalFormatSymbols(Locale.US);
-        decimalFormat = new DecimalFormat("#.##", symbols);
+        DecimalFormatSymbols symbols = new DecimalFormatSymbols(new Locale("pt", "BR")); // Set locale to Brazil
+        decimalFormat = new DecimalFormat("#,##0.########", symbols); // Adjusted format for Brazilian numbering
     }
 
     private void setupNumberButtonListeners() {
         View.OnClickListener numberListener = v -> {
             Button button = (Button) v;
-            if (isSecondInput || displayInput.getText().toString().equals("0")) {
-                displayInput.setText(button.getText());
+            if (isSecondInput || displayInput.getText().equals("0")) {
+                if (button.getText().toString().equals(".") && displayInput.getText().toString().contains(".")) {
+                    // Do nothing if there is already a dot and another dot is pressed
+                } else {
+                    displayInput.setText(button.getText());
+                }
+                if (!button.getText().toString().equals(".")) {
+                    isSecondInput = false; // Reset only if not a dot
+                }
             } else {
-                displayInput.append(button.getText());
+                if (button.getText().toString().equals(".") && displayInput.getText().toString().contains(".")) {
+                    // Do nothing if there is already a dot and another dot is pressed
+                } else {
+                    displayInput.append(button.getText());
+                }
             }
-            isSecondInput = false;  // Ready to take new number input
         };
 
         int[] numberIds = {
                 R.id.button_zero, R.id.button_one, R.id.button_two, R.id.button_three,
                 R.id.button_four, R.id.button_five, R.id.button_six,
-                R.id.button_seven, R.id.button_eight, R.id.button_nine
+                R.id.button_seven, R.id.button_eight, R.id.button_nine, R.id.button_dot
         };
 
         for (int id : numberIds) {
@@ -59,18 +69,19 @@ public class MainActivity extends AppCompatActivity {
         View.OnClickListener operationListener = v -> {
             Button button = (Button) v;
             try {
-                if (firstNumber != null && !isSecondInput) {  // Ensure firstNumber isn't null and it's not the second input
-                    double secondNumber = Double.parseDouble(displayInput.getText().toString());
+                if (firstNumber != null && operator != null && !isSecondInput) {
+                    double secondNumber = Double.parseDouble(displayInput.getText().toString().replace(',', '.'));
                     firstNumber = performOperation(firstNumber, secondNumber, operator);
                     displayInput.setText(decimalFormat.format(firstNumber));
-                } else if (firstNumber == null && !isSecondInput) {
-                    firstNumber = Double.parseDouble(displayInput.getText().toString());
                 }
-                operator = button.getText().toString();  // Set the new operator
+                if (firstNumber == null || isSecondInput) {
+                    firstNumber = Double.parseDouble(displayInput.getText().toString().replace(',', '.'));
+                }
+                operator = button.getText().toString();
                 isSecondInput = true;
             } catch (NumberFormatException nfe) {
                 displayInput.setText("Error");
-                firstNumber = null;  // Reset first number on error
+                firstNumber = null;
                 operator = null;
                 isSecondInput = false;
             }
@@ -86,11 +97,11 @@ public class MainActivity extends AppCompatActivity {
 
         findViewById(R.id.button_root).setOnClickListener(v -> {
             try {
-                double number = Double.parseDouble(displayInput.getText().toString());
+                double number = Double.parseDouble(displayInput.getText().toString().replace(',', '.'));
                 number = Math.sqrt(number);
                 displayInput.setText(decimalFormat.format(number));
-                firstNumber = number;  // Update firstNumber with the root result
-                operator = null;  // Reset operator
+                firstNumber = number;
+                operator = null;
                 isSecondInput = true;
             } catch (NumberFormatException nfe) {
                 displayInput.setText("Error");
@@ -101,15 +112,15 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.button_equals).setOnClickListener(v -> {
             try {
                 if (firstNumber != null && operator != null && !isSecondInput) {
-                    double secondNumber = Double.parseDouble(displayInput.getText().toString());
+                    double secondNumber = Double.parseDouble(displayInput.getText().toString().replace(',', '.'));
                     firstNumber = performOperation(firstNumber, secondNumber, operator);
                     displayInput.setText(decimalFormat.format(firstNumber));
                 }
-                operator = null;  // Reset the operator
-                isSecondInput = true;  // Expecting new input or operation
+                operator = null;
+                isSecondInput = true;
             } catch (NumberFormatException nfe) {
                 displayInput.setText("Error");
-                firstNumber = null;  // Reset on error
+                firstNumber = null;
             }
         });
     }
@@ -131,8 +142,11 @@ public class MainActivity extends AppCompatActivity {
                 return first - second;
             case "*":
                 return first * second;
-            case "/":
-                if (second == 0) return Double.POSITIVE_INFINITY; // Handle division by zero
+            case "÷":
+                if (second == 0) {
+                    displayInput.setText("não é possível dividir por zero");  // Custom error message
+                    return 0;  // Set second number to 0 as per your request
+                }
                 return first / second;
             case "^":
                 return Math.pow(first, second);

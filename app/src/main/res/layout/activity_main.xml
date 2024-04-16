@@ -47,8 +47,7 @@
             android:text="+"
             android:layout_columnWeight="1"
             android:layout_rowWeight="1"
-            android:backgroundTint="@color/orange"
-            tools:ignore="HardcodedText" />
+            android:backgroundTint="@android:color/holo_orange_dark"/>
 
         <Button
             android:id="@+id/button_four"
@@ -73,7 +72,7 @@
             android:text="-"
             android:layout_columnWeight="1"
             android:layout_rowWeight="1"
-            android:backgroundTint="@color/orange"/>
+            android:backgroundTint="@android:color/holo_orange_dark"/>
 
         <Button
             android:id="@+id/button_seven"
@@ -98,14 +97,14 @@
             android:text="*"
             android:layout_columnWeight="1"
             android:layout_rowWeight="1"
-            android:backgroundTint="@color/orange"/>
+            android:backgroundTint="@android:color/holo_orange_dark"/>
 
         <Button
             android:id="@+id/button_clear"
             android:text="C"
             android:layout_columnWeight="1"
             android:layout_rowWeight="1"
-            android:backgroundTint="@color/orange"/>
+            android:backgroundTint="@android:color/holo_orange_dark"/>
 
         <Button
             android:id="@+id/button_zero"
@@ -114,31 +113,38 @@
             android:layout_rowWeight="1"/>
 
         <Button
+            android:id="@+id/button_equals"
+            android:text="="
+            android:layout_columnWeight="1"
+            android:layout_rowWeight="1"
+            android:backgroundTint="@android:color/holo_blue_dark"/>
+
+        <Button
             android:id="@+id/button_divide"
             android:text="÷"
             android:layout_columnWeight="1"
             android:layout_rowWeight="1"
-            android:backgroundTint="@color/orange"/>
+            android:backgroundTint="@android:color/holo_orange_dark"/>
 
         <Button
             android:id="@+id/button_power"
             android:text="^"
             android:layout_columnWeight="1"
             android:layout_rowWeight="1"
-            android:backgroundTint="@color/orange"/>
+            android:backgroundTint="@android:color/holo_orange_dark"/>
 
         <Button
             android:id="@+id/button_root"
             android:text="√"
             android:layout_columnWeight="1"
             android:layout_rowWeight="1"
-            android:backgroundTint="@color/orange"/>
+            android:backgroundTint="@android:color/holo_orange_dark"/>
 
         <Button
-            android:id="@+id/button_equals"
-            android:text="="
+            android:id="@+id/button_dot"
+            android:text=","
             android:layout_columnWeight="1"
             android:layout_rowWeight="1"
-            android:backgroundTint="@color/blue"/>
+            android:backgroundTint="@android:color/holo_orange_dark"/>
     </GridLayout>
 </RelativeLayout>
